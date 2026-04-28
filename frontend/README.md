@@ -1,16 +1,57 @@
-# React + Vite
+# Tutorial: Creación de Cliente React con Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este documento detalla la estructura y el progreso actual de la aplicación **frontend**, desarrollada para consumir e interactuar con la API REST del backend.
 
-Currently, two official plugins are available:
+## Paso 1: Configuración Inicial del Proyecto
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+El proyecto se inicializó utilizando la herramienta de empaquetado Vite, la cual ofrece un entorno de desarrollo muy rápido y ligero para React.
 
-## React Compiler
+1. **Inicialización**: Creación del proyecto con la plantilla de React usando `npm create vite@latest`.
+2. **Dependencias principales**:
+   - `react` y `react-dom`: Librerías centrales para crear interfaces de usuario.
+   - `vite`: Entorno de desarrollo y construcción (build tool).
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Paso 2: Estructura del Proyecto
 
-## Expanding the ESLint configuration
+Hemos organizado el código para mantener una clara separación de responsabilidades y fomentar un código limpio:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- `src/api/`: Configuraciones de red. Aquí vive el archivo `client.js` donde configuramos nuestro acceso base al backend (`http://localhost:9000/api`).
+- `src/hooks/`: Custom hooks de React (como `useUsers.js`). Encapsulan la lógica de fetching y estado asíncrono para mantener limpios los componentes.
+- `src/components/`: Componentes visuales y de interfaz de usuario.
+- `src/assets/`: Imágenes, SVG e iconos estáticos que usa la UI.
+- `src/App.jsx` y `src/main.jsx`: Punto de montaje e inicio general de la aplicación.
+
+## Paso 3: Consumo de la API (Capa de Red)
+
+En la carpeta `src/api/` centralizamos las peticiones HTTP. Al usar un `client.js` separado, cualquier cambio de dominio del backend o el agregado de tokens de seguridad (headers) puede hacerse desde un único lugar sin tener que buscar petición por petición en todos los componentes.
+
+## Paso 4: Manejo de Estado (Custom Hooks)
+
+Para separar la lógica de negocio de la vista visual, usamos hooks personalizados como `useUsers.js`. 
+Este hook se responsabiliza de:
+- Llamar al servicio API correspondiente.
+- Controlar estados como `loading` (cargando), `error` (si falla la petición) y `data` (la lista recibida).
+- Exponer estas variables para que la UI responda en tiempo real.
+
+## Paso 5: Componentes de Interfaz
+
+En carpetas como `src/components/`, nos dedicamos netamente al UI. Los componentes aquí:
+- Consumen los hooks que creamos en el paso anterior.
+- Renderizan estados de carga (un simple "Cargando...") mientras llega la información.
+- Muestran una lista, tabla o tarjetas visuales cuando la información está lista.
+
+---
+
+## Cómo ejecutar de forma individual
+
+1. Asegúrate de estar en el directorio correcto: `cd frontend`
+2. Instala dependencias: `npm install`
+3. Arranca el entorno local: `npm run dev`
+4. Navega a la URL que indique la consola (usualmente `http://localhost:5173`)
+
+*(Recuerda que para que los datos carguen de verdad, el servicio backend debe estar corriendo también).*
+
+## Próximos Pasos en la UI
+- Implementar React Router (`react-router-dom`) para soportar múltiples vistas (dashboard, configuraciones).
+- Formularios interactivos para POST, PUT y DELETE usando componentes controlados en React.
+- Mejorar el diseño global y la accesibilidad de la aplicación.
